@@ -5,14 +5,28 @@ import { useClipboard } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
 import { IconClipboard } from '@tabler/icons'
-import { User } from '../../utils/types'
+import { User } from '../../utils/user'
 import { Link } from '../../renderer/Link'
 
-const validateUUID4 = (value: string) => (/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
+const validateUUID4 = (value: string) => true //(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
 
 const nonceFetcher = async (uid: string) => {
     const response = await axios.get<User>(import.meta.env.VITE_ASTEROID_SERVER_URL + '/users/' + uid)
     return response.data
+}
+
+const requestToken = async (uid: string, signature: string) => {
+    // get token from response
+    const { data } = await axios.post<{ code: number, expire: string, token: string }>(import.meta.env.VITE_ASTEROID_SERVER_URL + '/login', { id: uid, signature })
+
+    // save token to local storage
+    localStorage.setItem('token', data.token)
+
+    // set token in axios headers
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
+
+    window.location.href = '/notes'
+
 }
 
 export const Page = () => {
@@ -49,7 +63,7 @@ export const Page = () => {
         <Container size='xs' >
             <h1>Login</h1>
 
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form onSubmit={form.onSubmit((values) => requestToken(values.uid, values.signature))}>
                 <TextInput
                     label="User ID (UID)"
                     name="uid"
@@ -65,6 +79,7 @@ export const Page = () => {
                     required
                     placeholder='Ex. aedaFc...011029'
                     mt='md'
+                    {...form.getInputProps('signature')}
                 />
                 <Group position='right' mt='md'>
                     <Button type='submit'>Submit</Button>

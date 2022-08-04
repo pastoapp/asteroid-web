@@ -1,10 +1,41 @@
 import React from 'react'
 import { Group, Text, useMantineTheme, Container } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
-import { Dropzone, DropzoneProps, MIME_TYPES } from '@mantine/dropzone';
+import { Dropzone, DropzoneProps, } from '@mantine/dropzone';
+import { showNotification } from '@mantine/notifications'
+
+interface User {
+    _id: string
+    createdAt: number
+    nonce: string
+    notes: string
+    publicKey: string
+    updatedAt: number
+}
+
+
+const register = async (fileInput: File[]) => {
+    console.log(fileInput);
+
+    var formdata = new FormData();
+    formdata.append("file", fileInput[0],);
+
+    var requestOptions: RequestInit = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+    };
+
+    const response = await fetch("http://localhost:3000/users/", requestOptions)
+
+    const user: User = (await response.json()) as User;
+    return user
+}
 
 export function Page(props: Partial<DropzoneProps>) {
     const theme = useMantineTheme();
+    const [uid, setUid] = React.useState("");
+    const [nonce, setNonce] = React.useState("");
     return (
         <Container size='xs'>
             <h1>
@@ -19,15 +50,15 @@ export function Page(props: Partial<DropzoneProps>) {
             <p>
                 Because it is important, here it is again:<br />
                 The keypair should have the following requirements:
-                <ul>
-                    <li>RSA</li>
-                    <li>PEM encoded</li>
-                    <li>2048 bit size</li>
-                </ul>
             </p>
+            <ul>
+                <li>RSA</li>
+                <li>PEM encoded</li>
+                <li>2048 bit size</li>
+            </ul>
             <Dropzone
-                onDrop={(files) => console.log('accepted files', files)}
-                onReject={(files) => console.log('rejected files', files)}
+                onDrop={(files) => register(files).then(({ _id, nonce }) => { setUid(_id); setNonce(nonce) })}
+                onReject={(files) => showNotification({ message: 'Invalid file type!', title: 'Error' })}
                 maxSize={3 * 1024 ** 2}
                 {...props}
             >
@@ -60,6 +91,14 @@ export function Page(props: Partial<DropzoneProps>) {
                     </div>
                 </Group>
             </Dropzone>
+
+            {
+                uid && <h1>User ID: {uid}</h1>
+            }
+
+            {
+                nonce && <h1>Nonce: {nonce}</h1>
+            }
         </Container>
     );
 }

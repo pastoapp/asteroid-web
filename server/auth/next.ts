@@ -21,7 +21,7 @@ const options = {
                 console.log(credentials);
 
                 const { uid, signature } = credentials;
-                const response = await fetch(`${import.meta.env.VITE_ASTEROID_SERVER_URL}/login`, {
+                const response = await fetch(`${'http://localhost:3000'}/login`, {
                     method: "POST",
                     body: JSON.stringify({ id: uid, signature }),
                     headers: {
