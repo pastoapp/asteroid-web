@@ -1,6 +1,8 @@
 import express from 'express'
 import compression from 'compression'
 import { renderPage } from 'vite-plugin-ssr'
+import cookieParser from 'cookie-parser';
+import NextAuthHandler from './auth/next';
 
 const isProduction = process.env.NODE_ENV === 'production'
 const root = `${__dirname}/..`
@@ -11,6 +13,7 @@ async function startServer() {
   const app = express()
 
   app.use(compression())
+  app.use(cookieParser())
 
   if (isProduction) {
     const sirv = require('sirv')
@@ -25,6 +28,22 @@ async function startServer() {
     ).middlewares
     app.use(viteDevMiddleware)
   }
+
+  app.get("/api/auth/*", (req, res) => {
+    const nextauth = req.path.split("/");
+    nextauth.splice(0, 3);
+    req.query.nextauth = nextauth;
+
+    NextAuthHandler(req, res)
+  });
+
+  app.post("/api/auth/*", (req, res) => {
+    const nextauth = req.path.split("/");
+    nextauth.splice(0, 3);
+    req.query.nextauth = nextauth;
+
+    NextAuthHandler(req, res)
+  });
 
   app.get('*', async (req, res, next) => {
     const url = req.originalUrl

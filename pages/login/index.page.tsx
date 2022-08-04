@@ -6,6 +6,7 @@ import { useForm } from '@mantine/form'
 import axios from 'axios'
 import { IconClipboard } from '@tabler/icons'
 import { User } from '../../utils/types'
+import { Link } from '../../renderer/Link'
 
 const validateUUID4 = (value: string) => (/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
 
@@ -82,6 +83,10 @@ export const Page = () => {
                     <IconClipboard size={16} />
                 </ActionIcon>
             </span>
+            <Text mt={'md'}>
+                You can sign your nonce with your private key. <br />
+                You can either use <Link href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Link> or this <a href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</a>.
+            </Text>
         </Container>
     )
 }
