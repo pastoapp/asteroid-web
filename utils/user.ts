@@ -42,4 +42,4 @@ export const useUser = (): User => {
 }
 
 // splitNotes is a function that splits a string of notes into an array of note ids
-export const splitNotes = (notes: string): string[] => notes ? notes.split(';').filter(s => s.length > 0) : []
+export const splitNotes = (notes: string): string[] => notes ? notes.split(';').filter(s => s.length > 0).reverse() : []
