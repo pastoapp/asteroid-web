@@ -1,9 +1,10 @@
 import React from 'react'
 import { splitNotes, User, useUser } from '../../utils/user'
-import { Group, Container, Button, Modal, Textarea, Paper, Text, ActionIcon } from '@mantine/core'
+import { Group, Container, CopyButton, Button, Modal, Textarea, Paper, Text, ActionIcon, Stack, Tooltip } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { IconClipboard } from '@tabler/icons'
+import { IconCopy, IconCheck } from '@tabler/icons'
 import axios from 'axios'
+
 
 // createNote is a function that creates a new note
 const createNote = async (note: string) => {
@@ -30,13 +31,23 @@ export const Note = (props: NoteProps) => {
 
     return (
         <Paper shadow="lg" radius="lg" p="lg" withBorder>
-            <Text size='xs'>{nt.id}</Text>
-            <Text size='lg' align='center'>{nt.note}</Text>
-            <Text size='xs'>{nt.uid}</Text>
-            {/* <pre>{JSON.stringify({ nt: nt.note }, null, 2)}</pre> */}
-            <ActionIcon  >
-                <IconClipboard size={16} />
-            </ActionIcon>
+            <Group position='apart'>
+                {/* note info */}
+                <Stack>
+                    <Text size='xs' color='dimmed'>{nt.id}</Text>
+                    <Text size='lg' lineClamp={6}>{nt.note}</Text>
+                </Stack>
+                {/* copy note button */}
+                <CopyButton timeout={1000} value={nt.note}>
+                    {({ copy, copied }) => (
+                        <Tooltip label={`Copy Note ID ${nt.id}`} withArrow position='left'>
+                            <ActionIcon size='xl' color={copied ? 'teal' : 'blue'} variant='outline' onClick={copy}>
+                                {copied ? <IconCheck /> : <IconCopy />}
+                            </ActionIcon>
+                        </Tooltip>
+                    )}
+                </CopyButton>
+            </Group>
         </Paper >
     )
 }
@@ -56,6 +67,7 @@ export const Page = () => {
 
     return (
         <Container size="xl">
+            {/* New Note Dialogue */}
             <Modal
                 opened={showModal}
                 onClose={() => setShowModal(false)}
@@ -80,9 +92,13 @@ export const Page = () => {
             </Modal>
             <h1>Notes</h1>
             <h2>User: {uid ? uid : 'Not logged in.'}</h2>
-            <Button onClick={() => setShowModal(true)}>New Note</Button>
-            {notes.length > 0 ? <ul>{notes.map(note => <li key={note}><Note id={note} /></li>)}</ul> : <p>No notes</p>}
-            {/* <pre>{JSON.stringify({ info, user }, null, 2)}</pre> */}
+            {/* new note dialogue button */}
+            <Button size='xl' onClick={() => setShowModal(true)}>New Note</Button>
+            {/* Display notes if user is logged in */}
+            {notes.length > 0 ?
+                <Stack mt='lg'>{notes.map(note => <Note key={note} id={note} />)}</Stack> :
+                <p>No notes</p>
+            }
         </Container>
     )
 }

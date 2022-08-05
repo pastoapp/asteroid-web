@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Container, ActionIcon, Text, Button, TextInput, Group, } from '@mantine/core'
+import { Container, ActionIcon, Text, Button, TextInput, Group, CopyButton, Tooltip, Divider, Stack, } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { useClipboard } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
-import { IconClipboard } from '@tabler/icons'
+import { IconCheck, IconClipboard, IconCopy } from '@tabler/icons'
 import { User } from '../../utils/user'
 import { Link } from '../../renderer/Link'
 
@@ -61,47 +61,52 @@ export const Page = () => {
 
     return (
         <Container size='xs' >
-            <h1>Login</h1>
+            <Stack spacing={'md'}>
+                <h1>Login</h1>
 
-            <form onSubmit={form.onSubmit((values) => requestToken(values.uid, values.signature))}>
-                <TextInput
-                    label="User ID (UID)"
-                    name="uid"
-                    required
-                    placeholder='Ex. 099435ac-9894-4ccd-893f-b07cd7e5e766'
-                    mt='md'
-                    {...form.getInputProps('uid')}
-                />
+                <form onSubmit={form.onSubmit((values) => requestToken(values.uid, values.signature))}>
+                    <TextInput
+                        label="User ID (UID)"
+                        name="uid"
+                        required
+                        placeholder='Ex. 099435ac-9894-4ccd-893f-b07cd7e5e766'
+                        mt='md'
+                        {...form.getInputProps('uid')}
+                    />
 
-                <TextInput
-                    label="Signature"
-                    name="signature"
-                    required
-                    placeholder='Ex. aedaFc...011029'
-                    mt='md'
-                    {...form.getInputProps('signature')}
-                />
-                <Group position='right' mt='md'>
-                    <Button type='submit'>Submit</Button>
+                    <TextInput
+                        label="Signature"
+                        name="signature"
+                        required
+                        placeholder='Ex. aedaFc...011029'
+                        mt='md'
+                        {...form.getInputProps('signature')}
+                    />
+                    <Group position='right' mt='md'>
+                        <Button type='submit'>Submit</Button>
+                    </Group>
+                </form>
+                <Divider />
+                <Group position='apart'>
+                    <Text mt='md' size={'lg'}>
+                        Your nonce is: <code>{nonce}</code>
+                    </Text>
+                    <CopyButton value={nonce} timeout={2000}>
+                        {({ copied, copy }) => (
+                            <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
+                                <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy} size='xl' variant='outline'>
+                                    {copied ? <IconCheck /> : <IconCopy />}
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </CopyButton>
                 </Group>
-            </form>
-            <span>
-                <Text mt='md'>
-                    Your nonce is: <br /> <code>{nonce}</code>
+
+                <Text mt={'md'}>
+                    You can sign your nonce with your private key. <br />
+                    You can either use <Link href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Link> or this <a href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</a>.
                 </Text>
-                <ActionIcon color="blue" size="lg" variant="outline"
-                    disabled={!validateUUID4(form.values.uid)}
-                    onClick={() => {
-                        copy(nonce)
-                        showNotification({ message: 'Copied to clipboard! 🚀', title: 'Copied!' })
-                    }}>
-                    <IconClipboard size={16} />
-                </ActionIcon>
-            </span>
-            <Text mt={'md'}>
-                You can sign your nonce with your private key. <br />
-                You can either use <Link href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Link> or this <a href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</a>.
-            </Text>
+            </Stack>
         </Container>
     )
 }
