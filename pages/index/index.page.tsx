@@ -1,4 +1,4 @@
-import { Box, Card, Group, Image, Text } from '@mantine/core'
+import { Box, Card, Group, Image, Stack, Text, Title } from '@mantine/core'
 import { IconLogin, IconHandClick, IconBrandGit, IconClipboardText, IconFileAnalytics, IconInfoSquare, IconUser } from '@tabler/icons'
 import React from 'react'
 
@@ -10,6 +10,13 @@ export interface WelcomeCardProps {
   icon: React.ReactNode
   link: string
 }
+
+/**
+ * Card at the landing page
+ * 
+ * @param param0 props for the component, see WelcomeCardProps
+ * @returns JSX for the component
+ */
 function WelcomeCard({ title, subtitle, link, icon }: WelcomeCardProps) {
   return (<>
     <Card
@@ -36,10 +43,14 @@ function WelcomeCard({ title, subtitle, link, icon }: WelcomeCardProps) {
   </>)
 }
 
+/**
+ * 
+ * @returns JSX for the home-page
+ */
 function Page() {
   return (
     <>
-      <h1>Welcome</h1>
+      <Title mb={'xl'} align='center'>Welcome</Title>
       <Group position='center'>
         <WelcomeCard
           title={'Login'}
@@ -80,6 +91,7 @@ function Page() {
         <WelcomeCard
           title={'Thesis'}
           subtitle={`See what has inspired this application`}
+          // TODO add link
           link="#"
           icon={<IconFileAnalytics size={30} />}
         />

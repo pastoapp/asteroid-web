@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Container, ActionIcon, Text, Button, TextInput, Group, CopyButton, Tooltip, Divider, Stack, Code, Box, Center, Anchor, } from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { useClipboard } from '@mantine/hooks'
+import { Container, ActionIcon, Text, Button, TextInput, Group, CopyButton, Tooltip, Divider, Stack, Code, Box, Center, Anchor, Title, } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import axios from 'axios'
-import { IconCheck, IconClipboard, IconCopy } from '@tabler/icons'
+import { IconCheck, IconCopy } from '@tabler/icons'
 import { User } from '../../utils/user'
-import { Link } from '../../renderer/Link'
 
+/**
+ * Validate UUIDv4 format
+ * See: https://www.ietf.org/rfc/rfc4122.txt
+ * @param value the value to validate as string
+ * @returns if the value matches the regex
+ */
 const validateUUID4 = (value: string) => (/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
 
 const nonceFetcher = async (uid: string) => {
@@ -33,9 +36,6 @@ export const Page = () => {
     // state of the nonce for user authentication
     const [nonce, setNonce] = useState('Enter your UID first.')
 
-    // clipboard manager
-    const { copy } = useClipboard({ timeout: 1000 })
-
     // create form object
     const form = useForm({
         initialValues: {
@@ -44,7 +44,6 @@ export const Page = () => {
         },
         validate: {
             // validate uuid / uid
-            // https://www.ietf.org/rfc/rfc4122.txt
             uid: (value) => validateUUID4(value) ? null : 'Invalid UID',
             signature: (value) => value.length > 10 ? null : 'Signature is required',
         },
@@ -62,8 +61,8 @@ export const Page = () => {
     return (
         <Container size='xs' >
             <Stack spacing={'md'}>
-                <h1>Login</h1>
-
+                <Title>Login</Title>
+                {/* Login form */}
                 <form onSubmit={form.onSubmit((values) => requestToken(values.uid, values.signature))}>
                     <TextInput
                         label="User ID (UID)"
@@ -86,7 +85,9 @@ export const Page = () => {
                         <Button type='submit'>Submit</Button>
                     </Group>
                 </form>
+
                 <Divider />
+                {/* Nonce */}
                 <Group position='apart'>
                     <Center inline>
                         <Text size={'lg'} mr={'xs'}>
@@ -104,7 +105,7 @@ export const Page = () => {
                         )}
                     </CopyButton>
                 </Group>
-
+                {/* Info */}
                 <Text mt={'md'}>
                     You can sign your nonce with your private key. <br />
                     You can either use <Anchor href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Anchor> or this <Anchor href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</Anchor>.

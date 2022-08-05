@@ -1,22 +1,17 @@
 import React from 'react'
-import { Group, Text, useMantineTheme, Container, Anchor } from '@mantine/core';
-import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
+import { Group, Text, useMantineTheme, Container, Anchor, Title, Code, Divider, Alert } from '@mantine/core';
+import { IconUpload, IconPhoto, IconX, IconAlertCircle } from '@tabler/icons';
 import { Dropzone, DropzoneProps, } from '@mantine/dropzone';
 import { showNotification } from '@mantine/notifications'
-
-interface User {
-    _id: string
-    createdAt: number
-    nonce: string
-    notes: string
-    publicKey: string
-    updatedAt: number
-}
+import { User } from '../../utils/user';
 
 
+/**
+ * 
+ * @param fileInput the form file from the public key
+ * @returns 
+ */
 const register = async (fileInput: File[]) => {
-    console.log(fileInput);
-
     var formdata = new FormData();
     formdata.append("file", fileInput[0],);
 
@@ -26,7 +21,7 @@ const register = async (fileInput: File[]) => {
         redirect: 'follow',
     };
 
-    const response = await fetch("http://localhost:3000/users/", requestOptions)
+    const response = await fetch(`${import.meta.env.VITE_ASTEROID_SERVER_URL}/users/`, requestOptions)
 
     const user: User = (await response.json()) as User;
     return user
@@ -92,13 +87,26 @@ export function Page(props: Partial<DropzoneProps>) {
                 </Group>
             </Dropzone>
 
-            {
-                uid && <h1>User ID: {uid}</h1>
-            }
+            <Divider my={'xl'} />
 
-            {
-                nonce && <h1>Nonce: {nonce}</h1>
-            }
+            {uid && nonce && (
+                <Alert icon={<IconAlertCircle size={16} />} title="Success! 🚀" color="teal" withCloseButton variant="outline">
+                    <Text weight="bold">Save your credentials to a safe place!</Text>
+                    {
+                        uid && <>
+                            <Text>User ID:</Text>
+                            <Code block>{uid}</Code>
+                        </>
+                    }
+
+                    {
+                        nonce && <>
+                            <Text>Nonce:</Text>
+                            <Code block>{nonce}</Code>
+                        </>
+                    }
+                </Alert>
+            )}
         </Container>
     );
 }

@@ -2,6 +2,10 @@ import { Code, Container } from '@mantine/core'
 import React from 'react'
 import { useUser } from '../../utils/user'
 
+/**
+ * The Profile page at /profile
+ * @returns JSX for the profile page
+ */
 export const Page = () => {
     const user = useUser()
     return (

@@ -20,8 +20,8 @@ async function render(pageContext: PageContextBuiltIn & PageContext) {
 
   // See https://vite-plugin-ssr.com/head
   const { documentProps } = pageContext
-  const title = (documentProps && documentProps.title) || 'Vite SSR app'
-  const desc = (documentProps && documentProps.description) || 'App using Vite + vite-plugin-ssr'
+  const title = (documentProps && documentProps.title) || 'Asteroid Sync'
+  const desc = (documentProps && documentProps.description) || 'IPFS-based cloud clipboard'
 
   const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en">

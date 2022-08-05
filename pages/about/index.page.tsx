@@ -3,6 +3,10 @@ import React from 'react'
 
 export { Page }
 
+/**
+ * About page at /about
+ * @returns JSX for the about page
+ */
 function Page() {
   return (
     <>

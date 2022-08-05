@@ -1,3 +1,6 @@
+/**
+ * This file handles the server side rendering of the pages.
+ */
 import express from 'express'
 import compression from 'compression'
 import { renderPage } from 'vite-plugin-ssr'
@@ -7,6 +10,9 @@ const root = `${__dirname}/..`
 
 startServer()
 
+/**
+ * Starts the server. See https://vite-plugin-ssr.com/file-structure
+ */
 async function startServer() {
   const app = express()
 
@@ -37,6 +43,7 @@ async function startServer() {
     res.status(statusCode).type(contentType).send(body)
   })
 
+  // set default port
   const port = process.env.PORT || 5371
   app.listen(port)
   console.log(`Server running at http://localhost:${port}`)
