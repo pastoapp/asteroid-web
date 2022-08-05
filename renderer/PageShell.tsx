@@ -5,10 +5,12 @@ import './PageShell.css'
 import { MantineProvider } from '@mantine/core'
 import { MainLayout } from '../components/Layout'
 import { NotificationsProvider } from '@mantine/notifications'
+import { clipboardWatcher, } from '../utils/clipboard'
 
 export { PageShell }
 
 function PageShell({ children, pageContext }: { children: React.ReactNode; pageContext: PageContext }) {
+  const cl = clipboardWatcher()
   return (
     <React.StrictMode>
       <PageContextProvider pageContext={pageContext}>

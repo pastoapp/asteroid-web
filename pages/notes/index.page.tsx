@@ -10,9 +10,11 @@ import axios from 'axios'
  * createNote is a function that creates a new note
  * @param note the note to create as string
  */
-const createNote = async (note: string) => {
+export const createNote = async (note: string, reload = false) => {
     await axios.post(import.meta.env.VITE_ASTEROID_SERVER_URL + '/notes/', { note }, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } })
-    location.reload()
+    if (reload) {
+        location.reload()
+    }
 }
 
 /**
@@ -93,7 +95,7 @@ export const Page = () => {
                 onClose={() => setShowModal(false)}
                 title="Create a new note"
             >
-                <form onSubmit={form.onSubmit(values => createNote(values.note))}>
+                <form onSubmit={form.onSubmit(values => createNote(values.note, true))}>
                     <Textarea
                         placeholder="ex. new telefone number: 01231...."
                         label="New Note"

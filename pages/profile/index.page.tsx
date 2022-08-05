@@ -8,6 +8,7 @@ import { useUser } from '../../utils/user'
  */
 export const Page = () => {
     const user = useUser()
+
     return (
         <Container size='sm'>
             <h1>Profile</h1>
