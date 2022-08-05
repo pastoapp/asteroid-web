@@ -8,7 +8,7 @@ import { IconClipboard } from '@tabler/icons'
 import { User } from '../../utils/user'
 import { Link } from '../../renderer/Link'
 
-const validateUUID4 = (value: string) => true //(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
+const validateUUID4 = (value: string) => (/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(value))
 
 const nonceFetcher = async (uid: string) => {
     const response = await axios.get<User>(import.meta.env.VITE_ASTEROID_SERVER_URL + '/users/' + uid)
