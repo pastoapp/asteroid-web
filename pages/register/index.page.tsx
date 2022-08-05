@@ -1,5 +1,5 @@
 import React from 'react'
-import { Group, Text, useMantineTheme, Container } from '@mantine/core';
+import { Group, Text, useMantineTheme, Container, Anchor } from '@mantine/core';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
 import { Dropzone, DropzoneProps, } from '@mantine/dropzone';
 import { showNotification } from '@mantine/notifications'
@@ -43,9 +43,9 @@ export function Page(props: Partial<DropzoneProps>) {
             </h1>
             <p>
                 In order to register you need to provide a public key. This public key will be used to verify your identity.
-                The public key should be <a style={{ color: theme.colors.blue[0], textDecoration: 'underline' }} href='https://www.ssl.com/guide/pem-der-crt-and-cer-x-509-encodings-and-conversions/'>PEM encoded</a> and generated with a size of 2048 bits.
-                You can download a tool to help you generate a key-pair on <a style={{ color: theme.colors.blue[0], textDecoration: 'underline' }} href='https://gitlab.gwdg.de/v.mattfeld/asteroid-server'>
-                    this site</a> or <a style={{ color: theme.colors.blue[0], textDecoration: 'underline' }} href='https://travistidwell.com/jsencrypt/demo/'>do it yourself</a>.
+                The public key should be <Anchor href='https://www.ssl.com/guide/pem-der-crt-and-cer-x-509-encodings-and-conversions/'>PEM encoded</Anchor> and generated with a size of 2048 bits.
+                You can download a tool to help you generate a key-pair on <Anchor href='https://gitlab.gwdg.de/v.mattfeld/asteroid-server'>
+                    this site</Anchor> or <Anchor href='https://travistidwell.com/jsencrypt/demo/'>do it yourself</Anchor>.
             </p>
             <p>
                 Because it is important, here it is again:<br />

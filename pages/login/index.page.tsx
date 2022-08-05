@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Container, ActionIcon, Text, Button, TextInput, Group, CopyButton, Tooltip, Divider, Stack, } from '@mantine/core'
+import { Container, ActionIcon, Text, Button, TextInput, Group, CopyButton, Tooltip, Divider, Stack, Code, Box, Center, Anchor, } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { useClipboard } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
@@ -88,9 +88,12 @@ export const Page = () => {
                 </form>
                 <Divider />
                 <Group position='apart'>
-                    <Text mt='md' size={'lg'}>
-                        Your nonce is: <code>{nonce}</code>
-                    </Text>
+                    <Center inline>
+                        <Text size={'lg'} mr={'xs'}>
+                            Your nonce is:
+                        </Text>
+                        <Code color="blue" block>{nonce}</Code>
+                    </Center>
                     <CopyButton value={nonce} timeout={2000}>
                         {({ copied, copy }) => (
                             <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
@@ -104,7 +107,7 @@ export const Page = () => {
 
                 <Text mt={'md'}>
                     You can sign your nonce with your private key. <br />
-                    You can either use <Link href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Link> or this <a href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</a>.
+                    You can either use <Anchor href="https://gitlab.gwdg.de/v.mattfeld/asteroid-server/">the tested tool</Anchor> or this <Anchor href="https://8gwifi.org/rsasignverifyfunctions.jsp">online application</Anchor>.
                 </Text>
             </Stack>
         </Container>
